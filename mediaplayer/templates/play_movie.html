@@ -1,0 +1,73 @@
+{% extends "home.html" %}
+{% load static %}
+{% block title %}
+Add Movie
+{% endblock title %}
+{% block carousel %}
+{% endblock carousel %}
+{% block card %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<style>
+    .f_com{
+width: 100%;
+height: 40px;
+border: none;
+padding: 5px;
+border-radius: 5px;
+box-shadow: 0px 2px 1px;
+background-color:rgba(255, 0, 0, 0);
+    }
+</style>
+<div style="width: 100%; height: 80%;" class="container-fluid">
+    <div align="center">
+        <link href="https://vjs.zencdn.net/7.19.2/video-js.css" rel="stylesheet" />
+       <video
+          id="my-video"
+          class="video-js vjs-default-skin"
+          controls
+          preload="auto"
+          poster="{{instance.thumbnail.url}}"
+          data-setup='{}'>
+          <source
+             src="{{instance.movie.url}}"
+             type="video/mp4"
+          >
+       </video>
+       <script src="https://vjs.zencdn.net/7.17.0/video.min.js"></script>
+       <script>
+          var player1 = videojs('my-video', {
+             fluid: true
+          });
+       </script>
+</div>
+<h3  style="color: rgb(32, 29, 29);width: 50%; text-shadow: 2px 1px 2px rgb(165, 28, 28);text-transform: capitalize; ">{{instance.title}}</h3>
+<p style="color: rgb(30, 17, 218);"> {{instance.views}} views </p>
+<p style="color: black; width: 90%; background-color: aliceblue; box-shadow: 2px 1px 1px ;">{{instance.description}} </p>
+<p style="color: black;">__{{instance.name}}</p>
+<p style="color: black;" >Uploaded Date: {{instance.uploaded_at}}</p>
+<a href="{{instance.movie.url}}" download><button type="button" class="btn btn-outline-success">download</button></a>
+<a href="{% url 'add-like' instance.slug %}"><button class="btn btn-outline-danger" type="submit">like</button></a>
+<r style="color: rgb(30, 17, 218);">{{instance.likes}}</r> 
+<br> <br>
+<div style="line-height: 10px; background-color: rgba(186, 182, 176, 0); border-radius: 5px; padding: 5px; box-shadow: 0px 1px 1px;">
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-outline-danger" type="submit">Add Comment</button>
+    </form>
+</div>
+<br>
+<div >
+    {% for comment in comments %}
+    <p style="color :red" >{{comment.full_name}}</p>
+    <h5 >{{comment.comments}}</h5>
+    <small>{{comment.created_at}}</small>
+    <p>_____________</p>
+    {% endfor %}
+</div>
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="js/like-dislike.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock card %}

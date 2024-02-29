@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="cooking_website">
+    <meta name="keywords" content="Recipe, Recipe, Recipe, cooking">
+    <link rel="canonical" href="http://www.cooking_Delight.in/">
+    <title>cooking_website</title>
+    {% load static %}
+    <title>
+      {% block title %}
+      Home Page (Recipe)
+      {% endblock title %}
+    </title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <!-- MDB -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet" />
+  </head>
+
+  <body style="background-color: rgb(245, 236, 236);">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-5-strong">
+      <!-- Container wrapper -->
+      <div class="container-fluid my-2">
+        <!-- Navbar brand -->
+        <a class="navbar-brand" style="text-shadow: 2px 1px 2px rgb(11, 2, 2); text-transform: capitalize;"
+          href="{% url 'home' %}"><img width="40" height="40"
+            src="https://img.icons8.com/external-colours-bomsymbols-/91/000000/external-cooking-food-set-2-colours-bomsymbols--6.png"
+            alt="external-cooking-food-set-2-colours-bomsymbols--6" />
+          <h1> cooking_Delight</h1>
+        </a>
+        <!-- Toggle button -->
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+          data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <i style="color: rgb(7, 7, 7);" class="fas fa-bars">add</i>
+        </button>
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <!-- Left links -->
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a style="color: rgb(7, 7, 7);" class="nav-link active" aria-current="page"
+                href="{% url 'home' %}">ᕼOᗰE</a>
+            </li>
+            {% if request.user.is_authenticated %}
+            <li class="nav-link active">
+              <a style="color: rgb(7, 7, 7);" class="nav-link" href="{% url 'logout' %}">ᒪOGOᑌT</a>
+            </li>
+            {% else %}
+            <li class="nav-link active">
+              <a style="color: rgb(7, 7, 7);" class="nav-link active" href="{% url 'signup' %}">𝚂𝚒𝚐𝚗𝚞𝚙</a>
+            </li>
+            <li class="nav-link active">
+              <a style="color: rgb(7, 7, 7);" class="nav-link active" href="{% url 'login' %}">ᒪOGIᑎ</a>
+            </li>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+            <li class="nav-link active">
+              <a style="color: rgb(7, 7, 7);" class="nav-link active"
+                href="{% url 'public-profile' request.user %}">𝙿ᖇOᖴIᒪE</a>
+            </li>
+            {% else %}
+            <li class="nav-link active">
+              <a style="color: rgb(7, 7, 7);" class="nav-link active" href="{% url 'login' %}">𝙿𝚛𝚘𝚏𝚒𝚕𝚎</a>
+            </li>
+            {% endif %}
+          </ul>
+          <!-- Left links -->
+        </div>
+      </div>
+      <!-- Right elements -->
+      <div class="align-items-center me-3 collapse navbar-collapse" id="navbarSupportedContent">
+        <!-- Icon -->
+        <a class="text-reset" data-mdb-toggle="tooltip" title="Add Movies" href="{% url 'add-movie' %}">
+          <i style="color: rgb(7, 7, 7);" class="fas fa-plus-circle"> upload</i>
+        </a>
+      </div>
+      <!-- Container wrapper -->
+    </nav>
+    <!-- Navbar -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show alert-success" role="alert" data-mdb-color="warning"
+      data-mdb-alert-init="" id="customxD" data-mdb-alert-initialized="true">
+      {{message}}
+      <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% block carousel %}
+
+    <!-- Carousel wrapper -->
+    <div class="htr" style="width: 70%; margin: auto; border: none;">
+      <form class="form-inline my-2 my-lg-0">
+        <input id="searchbar" style="border: none;box-shadow: 1px 2px 3px;" onkeyup="search_animal()" type="text"
+          name="search" placeholder="Search Recipes...."><img
+          src="https://img.icons8.com/external-kiranshastry-gradient-kiranshastry/34/null/external-search-logistic-delivery-kiranshastry-gradient-kiranshastry.png" />
+    </div>
+    {% endblock carousel %}
+    {% block card2 %}
+    {% endblock card2 %}
+    {% block card %}
+    <section class="h-100 gradient-custom-2">
+      <div class="container py-2 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col col-lg-12 col-xl-10">
+            <div class="row row-cols-2 row-cols-md-3 g-4">
+              {% for movie in movies %}
+              <script async defer crossorigin="anonymous"
+                src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v17.0" nonce="Txjb5pkk"></script>
+              <div class="col">
+                <a href="{% url 'play-movie' movie.slug %}">
+                  <div style="border-radius: 5px; background-color: rgb(199, 183, 183);" class="card h-100 mt-1">
+                    <img
+                      style="height: 250px; width: 100%; border-radius: 10px;box-shadow: 3px 3px 3px rgb(181, 126, 126); "
+                      src="{{ movie.thumbnail.url }}" class="card-body" alt="Skyscrapers" />
+                    <div class="card-body">
+                      <h5 class="card-title"
+                        style="text-shadow: 2px 1px 2px rgb(11, 2, 2); text-transform: capitalize;">{{movie.title}}</h5>
+                      <p style="color: rgb(132, 33, 33);" class="card-text">
+                        {{movie.name}}</p>
+                      <button type="button" class="btn btn-outline-danger">WATCH</button>
+                      </p>
+                    </div>
+                    <div class="card-footer">
+                      <small class="text-muted">Added By: <a
+                          href="{% url 'public-profile' movie.user %}">{{movie.user}}</a></small>
+                    </div>
+                  </div>
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endblock card %}
+    <!-- MDB -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
+    <script>
+      function search_animal() {
+        let input = document.getElementById('searchbar').value
+        input = input.toLowerCase();
+        let x = document.getElementsByClassName('col');
+
+        for (i = 0; i < x.length; i++) {
+          if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display = "none";
+          }
+          else {
+            x[i].style.display = "list-item";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>

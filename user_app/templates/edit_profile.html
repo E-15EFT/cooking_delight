@@ -1,0 +1,31 @@
+<!-- edit_profile.html -->
+{% extends "home.html" %}
+{% load static %}
+{% block title %}
+Add Movie
+{% endblock title %}
+{% csrf_token %}
+{% block carousel %}
+{% endblock carousel %}
+{% block card %}
+<form method="post" enctype="multipart/form-data">
+<div class="row mb-4">
+    <div class="col">
+      <div data-mdb-input-init class="form-outline">
+        <input type="text" id="form3Example1" class="form-control" />
+        <label class="form-label" for="form3Example1"> {{ user_form.as_p }}</label>
+      </div>
+    </div>
+  </div>
+  <br> <br>
+  <!-- Email input -->
+  <div data-mdb-input-init class="form-outline mb-4">
+    <input type="email" id="form3Example3" class="form-control" />
+    <label class="form-label" for="form3Example3"> {{ profile_form.as_p }}</label>
+  </div>
+  <br>
+  <!-- Submit button -->
+  <button data-mdb-ripple-init type="submit" class="btn btn-primary btn-block mb-4">Save Changes</button>
+  <!-- Register buttons -->
+</form>
+{% endblock card %}
