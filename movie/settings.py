@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-&8%*nlx9d!urrpo+3$jxuo-k*k0$$j89rl(2deg*5ektta2c4*"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '54.253.228.170']
 
@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "mediaplayer",
-    # 'storages',
     "user_app",
   
 ]
@@ -79,24 +78,25 @@ WSGI_APPLICATION = "movie.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 # local database
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-# production database
+# 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cooking',
-        'USER': 'cooking_delight',
-        'PASSWORD': 'cookingpass',
-        'HOST': 'localhost',
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+# production database
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'cooking',
+#         'USER': 'cooking_delight',
+#         'PASSWORD': 'cookingpass',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
 
 
 # Password validation

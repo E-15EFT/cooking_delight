@@ -50,17 +50,58 @@ def like(request, slug):
         return response
     # If the user has already liked the movie, redirect back to the movie page
     return redirect("play-movie", instance.slug)
+# @login_required(login_url="/login/")
+# def add_movie(request):   
+#         if request.method == "POST":
+#             fm = UploadMovieForm(request.POST, request.FILES)
+#             if fm.is_valid():
+#                 obj = fm.save(commit=False)
+#                 obj.slug = slugify(obj.title)
+#                 obj.user = request.user
+#                 obj.save()
+#                 fm.save_m2m()
+#                 messages.success(request, "Movie Uploaded Successfully")
+#                 return HttpResponseRedirect("/")
+#         fm = UploadMovieForm()
+#         return render(request, "add_movie.html", {"form": fm})
+
+
+from django.utils.text import slugify
+from django.db import IntegrityError
+from django.http import JsonResponse
+
 @login_required(login_url="/login/")
-def add_movie(request):   
-        if request.method == "POST":
-            fm = UploadMovieForm(request.POST, request.FILES)
-            if fm.is_valid():
-                obj = fm.save(commit=False)
-                obj.slug = slugify(obj.title)
-                obj.user = request.user
-                obj.save()
-                fm.save_m2m()
-                messages.success(request, "Movie Uploaded Successfully")
-                return HttpResponseRedirect("/")
+def add_movie(request):
+    if request.method == "POST":
+        fm = UploadMovieForm(request.POST, request.FILES)
+        if fm.is_valid():
+            obj = fm.save(commit=False)
+            obj.slug = generate_unique_slug(obj.title)
+            obj.user = request.user
+            obj.save()
+            fm.save_m2m()
+            return JsonResponse({'success': True})
+        else:
+            errors = fm.errors.as_json()
+            return JsonResponse({'success': False, 'errors': errors}, status=400)
+    else:
         fm = UploadMovieForm()
         return render(request, "add_movie.html", {"form": fm})
+
+def generate_unique_slug(title, max_length=1300):
+    base_slug = slugify(title)[:max_length]
+    slug = base_slug
+    counter = 1
+    while True:
+        try:
+            # Check if the slug already exists
+            UploadMovie.objects.get(slug=slug)
+            # If it does, append a counter and try again
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+        except UploadMovie.DoesNotExist:
+            # If the slug is unique, return it
+            return slug
+        # Add a safeguard to avoid infinite loop
+        if counter > 2000:
+            raise IntegrityError("Unable to generate unique slug")

@@ -9,12 +9,211 @@ Add Movie
 <div class="row">
     <div class="col-4"></div>
     <div class="col-4">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form id="uploadForm" action="{% url 'add-movie' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {{form.as_p}}
-            <input class="btn btn-dark" type="submit" value="submit">
+            {{ form.as_p }}
+            <input class="btn btn-dark" type="submit" value="Submit">
         </form>
+        <div class="progress mt-3">
+            <div id="progressBar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
     </div>
     <div class="col-4"></div>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#uploadForm').submit(function(event) {
+        event.preventDefault();
+        
+        var form = $(this);
+        var formData = new FormData(form[0]);
+        
+        $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable && evt.loaded < evt.total) {
+                        var percentComplete = evt.loaded / evt.total * 100;
+                        $('#progressBar').css('width', percentComplete + '%');
+                        $('#progressBar').attr('aria-valuenow', percentComplete);
+                        $('#progressBar').text(percentComplete.toFixed(2) + '%');
+                    }
+                }, false);
+                return xhr;
+            },
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Redirect to home page after successful upload
+                window.location.href = '/';
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
+
+<!-- <script>
+$(document).ready(function() {
+    $('#uploadForm').submit(function(event) {
+        event.preventDefault();
+        
+        var form = $(this);
+        var formData = new FormData(form[0]);
+        
+        $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = evt.loaded / evt.total * 100;
+                        $('#progressBar').css('width', percentComplete + '%');
+                        $('#progressBar').attr('aria-valuenow', percentComplete);
+                        $('#progressBar').text(percentComplete.toFixed(2) + '%');
+                    }
+                }, false);
+                return xhr;
+            },
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Handle success response here
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script> -->
+
+<!-- <script>
+$(document).ready(function() {
+    $('#uploadForm').submit(function(event) {
+        event.preventDefault();
+        
+        var form = $(this);
+        var formData = new FormData(form[0]);
+        
+        $.ajax({
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable && evt.loaded < evt.total) {
+                        var percentComplete = evt.loaded / evt.total * 100;
+                        $('#progressBar').css('width', percentComplete + '%');
+                        $('#progressBar').attr('aria-valuenow', percentComplete);
+                        $('#progressBar').text(percentComplete.toFixed(2) + '%');
+                    }
+                }, false);
+                return xhr;
+            },
+            url: form.attr('action'),
+            type: form.attr('method'),
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                // Handle success response here
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle error here
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script> -->
+
+
+<style>
+
+
+.progress{
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 10px;
+  background: #f1f1f1;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.Loading:after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 0;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, .2);
+  animation: load 5s infinite;
+}
+
+@keyframes load {
+  0% {
+    width: 0;
+    background: #a28089;
+  }
+  
+  25% {
+    width: 40%;
+    background: #a0d2eb;
+  }
+  
+  50% {
+    width: 60%;
+    background: #ffa8b6;
+  }
+  
+  75% {
+    width: 75%;
+    background: #d0bdf4;
+  }
+  
+  100% {
+    width: 100%;
+    background: #494d5f;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    background: #a28089;
+  }
+  
+  25% {
+    background: #a0d2eb;
+  }
+  
+  50% {
+    background: #ffa8b6;
+  }
+  
+  75% {
+    background: #d0bdf4;
+  }
+  
+  100% {
+    background: #494d5f;
+  }
+}
+</style>
 {% endblock card %}
