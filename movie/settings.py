@@ -143,7 +143,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "/media/")
 
 LOGIN_URL = "admin/login"
 
-
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1200000000000 # 5 MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1200000000000 # 5 MB
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
